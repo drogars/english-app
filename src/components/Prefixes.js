@@ -1,54 +1,65 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Card, Container } from 'react-bootstrap';
 
-const PrefixCard = ({root, prefix, word}) => {
-  return (
-    <div className="card-container">
-      <div className="front">
-      <h2>{root}</h2>
-      </div>
-      <div className="back hide">
-      <h1>{prefix}</h1>
-      <h2>{word}</h2>
-      </div>
-    </div>
-  )
-}
+
 
 function PrefixView() {
 
-  const [prefixes, setPrefixes] = useState([]);
+  const [cardData, setCardData] = useState([]);
+  const [visible, setVisible] = useState(1);
 
-  useEffect(() => {
-    const getWords = async function () {
-      const apiUrl = '<https://api.apispreadsheets.com/data/MZBaGSW88gjPEDuA/>';
-      const response = await axios.get(apiUrl);
-      const data = response.data;
-      console.log("data", data);
+  const allCardData = async () => {
+    const response = await axios.get("https://api.apispreadsheets.com/data/MZBaGSW88gjPEDuA/");
+    const data = response.data;
+    setCardData(data.results);
+  }
 
-      let wordArray = [];
-      for (let i=0; i < data.length; i++) {
-        const index = Math.floor(Math.random() * data.length);
-        wordArray.push(data[index]);
-      }
-      setPrefixes(wordArray);
+  const loadData = () => {
+    setVisible(visible +1);
+  }
+
+    useEffect(() => {
+      allCardData();
+    }, [])
+
+    const renderCard = (word, index) => {
+      return (
+        <Container>
+        <Card style={{width: "24rem"}} className="front">
+          <Card.Body>
+            <Card.Text>
+              <h2>{word.root}</h2>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Card style={{width: "24rem"}} className="back hide">
+        <Card.Body>
+          <Card.Text>
+            <h2>{word.prefix}</h2>
+            <h2>{word.word}</h2>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+      </Container>
+      )
     }
-    getWords();
-  }, [])
-
     return (
-      <div>
-        {prefixes.map((prefix, index) =>
-        <PrefixCard
-        key={index}
-        root={prefix.root}
-        prefix={prefix.prefix}
-        word={prefix.word}
-        />
+      <div className="App">
+        <div className="cards">
+
+        </div>
+        {cardData.map((visible, index).map(renderCard)}
+        {visible < cardData.length && (
+          <button onClick={loadData}>Load New Card</button>
         )}
-      </div>  
+        
+       
+       
+      </div>
     )
+
   }
 
 function Prefixes() {
