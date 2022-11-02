@@ -14,7 +14,8 @@ const PrefixCard = ({ prefixcard }) => {
             {prefixcard.root}
             </div>    
             <div className="back">
-            {prefixcard.word}
+            <h1>{prefixcard.prefix}</h1>
+            <h2>{prefixcard.word}</h2>
             </div>
           </div>
       </div>

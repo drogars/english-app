@@ -1,7 +1,11 @@
 import React from "react";
 import PrefixCard from "./PrefixCard";
 
+
+  
+
 const PrefixList = ({ prefixcards }) => {
+
     return (
         <div className="card-container">
             {prefixcards.map(prefixcard =>{
@@ -12,3 +16,4 @@ const PrefixList = ({ prefixcards }) => {
 }
 
 export default PrefixList;
+
