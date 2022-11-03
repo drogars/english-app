@@ -1,8 +1,7 @@
 import './App.css';
 import React, {  useState } from 'react';
 import PrefixList from './components/PrefixList';
- 
-
+import axios from 'axios';
 
 function Header() {
   return (
@@ -394,28 +393,38 @@ const SAMPLE_CARDS = [ {
 
 function App() {
 
-  const [cards, setCards] = useState(SAMPLE_CARDS);
-
-
+  //const [cards, setCards] = useState(SAMPLE_CARDS);
+  let setCards;
+  
   //TRY AGAIN LATER WITH API
-//   useEffect(() => {
-//     axios.get('https://api.apispreadsheets.com/data/MZBaGSW88gjPEDuA/')
-//     .then(response => {
 
-//      setCards(response.data);
-//      console.log(response.data)
-//       .catch(setError);
-// })}, [])
-
-
- 
-
+  // I am not sure what useEffect does here, and it didn't seem necessary,
+  // at least to get it working, so I left it out.
+  //useEffect(() => {
+    
+    // Wrapped the whole get method in a try/catch to make it easier to see what was breaking
+    try {
+      axios.get('https://api.apispreadsheets.com/data/MZBaGSW88gjPEDuA/')
+        // the axios documentation seemed to indicate that the code in the then
+        // and catch needed to be functions, so I made them functions
+        .then(function (response) {
+          console.log(response.data)
+          setCards = response;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    catch (err) {
+      console.log(err);
+    }
+//    });
 
   return (
     <div className="App">
       <Header />
       
-      <PrefixList prefixcards={cards} />
+      <PrefixList prefixcards={setCards} />
     </div>
   );
 }
